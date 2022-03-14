@@ -179,9 +179,14 @@ class ControllerPaymentPayTen extends Controller
             $data['header'] = $this->load->controller('common/header');
             $this->response->setOutput($this->load->view('default/template/common/success.tpl', $data));
         } else {
-
-           $this->model_checkout_order->addOrderHistory($_POST['ORDER_ID'], $this->config->get('payten_order_status_id'));
-           $this->response->redirect($this->url->link('checkout/success', 'language=' . $this->config->get('config_language')));
+            
+            if($_POST['STATUS'] == 'Captured'){
+              $this->model_checkout_order->addOrderHistory($_POST['ORDER_ID'], $this->config->get('payten_order_status_id'));
+              $this->response->redirect($this->url->link('checkout/success', 'language=' . $this->config->get('config_language')));
+            }
+            else{
+             return $this->response->redirect($this->url->link('checkout/cart', 'language=' . $this->config->get('config_language')));
+            }
         }
     }
 }
